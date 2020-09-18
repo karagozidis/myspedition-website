@@ -1,0 +1,41 @@
+.list_carousel {
+	padding: 15px 0 15px 40px;
+        height: 100px;
+        width: 1000px;
+}
+ul.jcaroufredsel-skin-mazaholic {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: block;
+        margin-bottom: 20px; 
+        height: 100px;
+        width: 1000px;
+}
+ul.jcaroufredsel-skin-mazaholic li {
+	font-size: 30px;
+	color: #666;
+	text-align: center;
+	/*background-color: #f0f0f0;
+	border: 5px solid #ccc;*/
+	width: auto;
+	height: auto;
+	/*padding: 300px;*/
+        padding-left: 52px;
+        padding-right: 52px;
+        margin: 6px;
+	display: block;
+	float: left;
+        height: 100px;
+        width: 80px;
+}
+.clearfix {
+        height: 100px;
+        width: 1000px;
+	float: none;
+	clear: both;
+}
+
+div.caroufredsel_wrapper{
+        width: 1000px;
+}

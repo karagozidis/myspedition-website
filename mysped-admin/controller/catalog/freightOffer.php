@@ -1,0 +1,1850 @@
+<?php 
+class ControllerCatalogFreightOffer extends Controller {
+	private $error = array(); 
+     
+  	public function index() {
+
+		$this->language->load('catalog/freightOffer');
+    	
+		$this->document->setTitle($this->language->get('heading_title')); 
+		
+		$this->load->model('catalog/freightOffer');               
+		
+		$this->getList();
+  	}
+  
+  	public function insert() {
+    	$this->language->load('catalog/freightOffer');
+
+    	$this->document->setTitle($this->language->get('heading_title')); 
+		
+		$this->load->model('catalog/freightOffer');
+		
+    	if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {   
+                       // echo $this->request->post['loading_country_id'];
+                       // echo $this->request->post['jan'];
+			$this->model_catalog_freightOffer->addProduct($this->request->post);
+	  		
+			$this->session->data['success'] = $this->language->get('text_success');
+	  
+			$url = '';
+			
+			if (isset($this->request->get['filter_name'])) {
+				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
+			}
+		
+			if (isset($this->request->get['filter_model'])) {
+				$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
+			}
+			
+			if (isset($this->request->get['filter_price'])) {
+				$url .= '&filter_price=' . $this->request->get['filter_price'];
+			}
+			
+			if (isset($this->request->get['filter_quantity'])) {
+				$url .= '&filter_quantity=' . $this->request->get['filter_quantity'];
+			}
+			
+			if (isset($this->request->get['filter_status'])) {
+				$url .= '&filter_status=' . $this->request->get['filter_status'];
+			}
+					
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+			
+                        $this->redirect($this->url->link('sale/customer/update','customer_id='. $this->request->post['customer_id']  .'&token=' . $this->session->data['token'] . $url, 'SSL'));
+                        //$this->redirect($this->url->link('sale/customer/update','customer_id='. $this->request->get['customer_id']   .'&token=' . $this->session->data['token'] . $url, 'SSL'));
+			//$this->redirect($this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] .  $url, 'SSL'));
+    	}
+	
+    	$this->getForm();
+  	}
+
+  	public function update() {
+    	$this->language->load('catalog/freightOffer');
+        
+    	$this->document->setTitle($this->language->get('heading_title'));
+		
+		$this->load->model('catalog/freightOffer');
+            
+                
+    	if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+			$this->model_catalog_freightOffer->editProduct($this->request->get['product_id'], $this->request->post);
+			
+			$this->session->data['success'] = $this->language->get('text_success');
+			
+			$url = '';
+			
+			if (isset($this->request->get['filter_name'])) {
+				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
+			}
+		
+			if (isset($this->request->get['filter_model'])) {
+				$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
+			}
+			
+			if (isset($this->request->get['filter_price'])) {
+				$url .= '&filter_price=' . $this->request->get['filter_price'];
+			}
+			
+			if (isset($this->request->get['filter_quantity'])) {
+				$url .= '&filter_quantity=' . $this->request->get['filter_quantity'];
+			}	
+		
+			if (isset($this->request->get['filter_status'])) {
+				$url .= '&filter_status=' . $this->request->get['filter_status'];
+			}
+					
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+			
+			//$this->redirect($this->url->link('sale/customer/update','customer_id='. $this->request->post['customer_id']   .'&token=' . $this->session->data['token'] . $url, 'SSL'));
+		}
+
+    	$this->getForm();
+  	}
+
+  	public function delete() {
+    	$this->language->load('catalog/freightOffer');
+
+    	$this->document->setTitle($this->language->get('heading_title'));
+		
+		$this->load->model('catalog/freightOffer');
+		
+		if (isset($this->request->post['selected']) && $this->validateDelete()) {
+			foreach ($this->request->post['selected'] as $product_id) {
+				$this->model_catalog_freightOffer->deleteFreightOffer($product_id);
+	  		}
+
+			$this->session->data['success'] = $this->language->get('text_success');
+			
+			$url = '';
+			
+			if (isset($this->request->get['filter_name'])) {
+				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
+			}
+		
+			if (isset($this->request->get['filter_model'])) {
+				$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
+			}
+			
+			if (isset($this->request->get['filter_price'])) {
+				$url .= '&filter_price=' . $this->request->get['filter_price'];
+			}
+			
+			if (isset($this->request->get['filter_quantity'])) {
+				$url .= '&filter_quantity=' . $this->request->get['filter_quantity'];
+			}	
+		
+			if (isset($this->request->get['filter_status'])) {
+				$url .= '&filter_status=' . $this->request->get['filter_status'];
+			}
+					
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+			
+                        //$this->redirect($this->url->link('sale/customer/update','customer_id='. $this->request->get['customer_id']   .'&token=' . $this->session->data['token'] . $url, 'SSL'));
+			$this->redirect($this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] , 'SSL'));
+		}
+
+    	$this->getList();
+  	}
+
+  	public function copy() {
+    	$this->language->load('catalog/freightOffer');
+
+    	$this->document->setTitle($this->language->get('heading_title'));
+		
+		$this->load->model('catalog/freightOffer');
+		
+		if (isset($this->request->post['selected']) && $this->validateCopy()) {
+			foreach ($this->request->post['selected'] as $product_id) {
+				$this->model_catalog_freightOffer->copyProduct($product_id);
+	  		}
+
+			$this->session->data['success'] = $this->language->get('text_success');
+			
+			$url = '';
+			
+			if (isset($this->request->get['filter_name'])) {
+				$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
+			}
+		  
+			if (isset($this->request->get['filter_model'])) {
+				$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
+			}
+			
+			if (isset($this->request->get['filter_price'])) {
+				$url .= '&filter_price=' . $this->request->get['filter_price'];
+			}
+			
+			if (isset($this->request->get['filter_quantity'])) {
+				$url .= '&filter_quantity=' . $this->request->get['filter_quantity'];
+			}	
+		
+			if (isset($this->request->get['filter_status'])) {
+				$url .= '&filter_status=' . $this->request->get['filter_status'];
+			}
+					
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+			
+                         $this->redirect($this->url->link('sale/customer/update','customer_id='. $this->request->get['customer_id']   .'&token=' . $this->session->data['token'] . $url, 'SSL'));
+			//$this->redirect($this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] . $url, 'SSL'));
+		}
+
+    	//$this->getList();
+  	}
+	
+  	protected function getList() {	
+            
+            
+                if (isset($this->request->get['filter_email'])) {
+			$filter_email = $this->request->get['filter_email'];
+                    } else {
+			$filter_email = null;
+                    }
+                
+                if (isset($this->request->get['filter_loading_country'])) {
+			$filter_loading_country = $this->request->get['filter_loading_country'];
+                    } else {
+			$filter_loading_country = null;
+                    }
+               
+               if (isset($this->request->get['filter_offloading_country'])) {
+			$filter_offloading_country = $this->request->get['filter_offloading_country'];
+                    } else {
+			$filter_offloading_country = null;
+                    }
+                    
+                if (isset($this->request->get['filter_date_added'])) {
+			$filter_date_added = $this->request->get['filter_date_added'];
+                    } else {
+			$filter_date_added = null;
+                    }
+                
+                if (isset($this->request->get['filter_loading_date'])) {
+			$filter_loading_date = $this->request->get['filter_loading_date'];
+                    } else {
+			$filter_loading_date = null;
+                    }
+                    
+                    
+                        
+		if (isset($this->request->get['page'])) {
+			$page = $this->request->get['page'];
+                    } else {
+			$page = 1;
+                    }
+                    
+            	$url = '';
+	
+		if (isset($this->request->get['filter_email'])) {
+			$url .= '&filter_email=' . urlencode(html_entity_decode($this->request->get['filter_email'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+		if (isset($this->request->get['filter_loading_country'])) {
+			$url .= '&filter_loading_country=' . urlencode(html_entity_decode($this->request->get['filter_loading_country'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                if (isset($this->request->get['filter_offloading_country'])) {
+			$url .= '&filter_offloading_country=' . urlencode(html_entity_decode($this->request->get['filter_offloading_country'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+		if (isset($this->request->get['filter_loading_date'])) {
+			$url .= '&filter_loading_date=' . urlencode(html_entity_decode($this->request->get['filter_loading_date'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                if (isset($this->request->get['filter_date_added'])) {
+			$url .= '&filter_date_added=' . urlencode(html_entity_decode($this->request->get['filter_date_added'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                
+                if (isset($this->request->get['sort'])) {
+			$sort = $this->request->get['sort'];
+		} else {
+			$sort = 'pd.date_added';
+		}
+		
+		if (isset($this->request->get['order'])) {
+			$order = $this->request->get['order'];
+		} else {
+			$order = 'ASC';
+		}
+		
+                if (isset($this->request->get['sort'])) {
+			$url .= '&sort=' . $this->request->get['sort'];
+		}
+
+		if (isset($this->request->get['order'])) {
+			$url .= '&order=' . $this->request->get['order'];
+		}
+                
+                
+  		$this->data['breadcrumbs'] = array();
+
+   		$this->data['breadcrumbs'][] = array(
+       		'text'      => $this->language->get('text_home'),
+			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
+      		'separator' => false
+   		);
+
+                $this->data['breadcrumbs'][] = array(
+       		'text'      => ' account',
+			'href'      => $this->url->link('account/account', 'token=' . $this->session->data['token'], 'SSL'),
+      		'separator' => ' :: '
+   		);
+
+                                
+   		$this->data['breadcrumbs'][] = array(
+       		'text'      => " FreightOffer list",
+			'href'      => $this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] .  $url, 'SSL'),       		
+      		'separator' => ' :: '
+   		);
+		
+		$this->data['insert'] = $this->url->link('catalog/freightOffer/insert', 'token=' . $this->session->data['token'] . $url, 'SSL');
+		$this->data['copy'] = $this->url->link('catalog/freightOffer/copy', 'token=' . $this->session->data['token'] . $url, 'SSL');	
+		$this->data['delete'] = $this->url->link('catalog/freightOffer/delete', 'token=' . $this->session->data['token'] . $url, 'SSL');
+		$this->data['products'] = array();
+
+                
+               $data = array(
+                        'filter_email'                     => $filter_email, 
+                        'loading_country_id'           => $filter_loading_country, 
+                        'offloading_country_id'        => $filter_offloading_country, 
+			'filter_date_added'                => $filter_date_added, 
+                        'loading_date_to'                => $filter_loading_date, 
+                        'loading_date_from'                => $filter_loading_date, 
+			'start'           => ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'           => $this->config->get('config_admin_limit')
+		);
+                
+		
+		$this->load->model('tool/image');
+		
+		$product_total = $this->model_catalog_freightOffer->getTotalCustomerOffersAll($data);	
+		$results = $this->model_catalog_freightOffer->getCustomerOffersAll($data);
+			
+                $this->load->model('localisation/currency');
+                
+                $this->data['customer_url'] = 
+                         $this->url->link('sale/customer/update', 'token=' . $this->session->data['token'] .$url. '&customer_id=', 'SSL');
+                
+               $this->data['freight_url'] = 
+                         $this->url->link('catalog/freight/update', 'token=' . $this->session->data['token'] .$url. '&product_id=', 'SSL');
+                
+                   
+		foreach ($results as $result) {
+			$action = array();
+			
+			$action[] = array(
+				'text' => $this->language->get('text_edit'),
+				'href' => $this->url->link('catalog/freightOffer/update', 'token=' . $this->session->data['token'] . '&product_id=' . $result['freight_id'] . $url, 'SSL')
+			);
+			
+			if ($result['image'] && file_exists(DIR_IMAGE . $result['image'])) {
+				$image = $this->model_tool_image->resize($result['image'], 40, 40);
+			} else {
+				$image = $this->model_tool_image->resize('no_image.jpg', 40, 40);
+			}
+	
+			$special = false;
+			
+			//$product_specials = $this->model_catalog_freightOffer->getProductSpecials($result['product_id']);
+			
+	
+	
+                $this->load->model('localisation/country');                               
+                $loading_coutry = $this->model_localisation_country->getCountry( $result['loading_country_id'] );
+                $offloading_coutry = $this->model_localisation_country->getCountry( $result['offloading_country_id'] );
+                
+                $this->load->model('localisation/zone');                 
+                $loading_zone = $this->model_localisation_zone->getZone( $result['loading_zone_id'] );
+                $offloading_zone = $this->model_localisation_zone->getZone( $result['offloading_zone_id'] );
+                
+                $this->load->model('catalog/treiler');             
+                $trailer = $this->model_catalog_treiler->getTreiler($result['trailer_type_id'])   ;         
+
+             //   $this->load->model('sale/customer');             
+             //   $owner = $this->model_sale_customer->getCustomerByFreight($result['freightOffer_id'])   ;
+                   $curr=  $this->model_localisation_currency->getCurrency($result['rate_currency']);
+                        
+						
+      		$this->data['products'][] = array(
+				'product_id' => $result['freight_id'],
+                                'freight_offer_id' => $result['freight_offer_id'],
+				//'name'       => $result['name'],
+				//'model'      => $result['model'],
+				//'price'      => $result['price'],
+				'special'    => $special,
+				'image'      => $image,
+				//'quantity'   => $result['quantity'],
+				'status'     => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
+				'selected'   => isset($this->request->post['selected']) && in_array($result['product_id'], $this->request->post['selected']),
+				'action'     => $action,                        
+                                'loading_city' => $result['loading_city'],
+                                'offloading_city' => $result['offloading_city'],
+                               // 'zip_code' => $result['zip_code'],
+                                'loading_date' => $result['loading_date'],
+                                'date_added' => $result['date_added'],
+                                'est_date' => $result['est_date'],
+                                'loading_country' => $loading_coutry,
+                                'offloading_country' => $offloading_coutry,
+                                'loading_zone'       =>  $loading_zone,
+                                'offloading_zone'    =>  $offloading_zone,
+                                'trailer'            =>  $trailer,
+                                'owner_id'         =>  $result['owner_id'],
+                                'owner_name'         =>  $result['owner_name'],
+                                'owner_company'      =>  $result['owner_company'],
+                                'offerer_id'         =>  $result['offerer_id'],
+                                'offerer_name'       =>  $result['offerer_name'],
+                                'offerer_company'    =>  $result['offerer_company'],
+                                'offer_date'    =>  $result['offer_date'],
+                                'price'    =>  $result['price'],
+                                'freight_rate'    =>  $result['freight_rate'],
+                                'curreny'  =>  $curr['title']
+                        
+                               // 'owner' => $owner
+			);
+                }
+                
+                
+                $this->load->model('localisation/country');
+		$this->data['countries'] =  $this->model_localisation_country->getCountries(null);
+                
+                
+                
+		$this->data['heading_title'] = $this->language->get('heading_title');		
+				
+		$this->data['text_enabled'] = $this->language->get('text_enabled');		
+		$this->data['text_disabled'] = $this->language->get('text_disabled');		
+		$this->data['text_no_results'] = $this->language->get('text_no_results');		
+		$this->data['text_image_manager'] = $this->language->get('text_image_manager');		
+			
+		$this->data['column_image'] = $this->language->get('column_image');		
+		$this->data['column_name'] = $this->language->get('column_name');		
+		$this->data['column_model'] = $this->language->get('column_model');		
+		$this->data['column_price'] = $this->language->get('column_price');		
+		$this->data['column_quantity'] = $this->language->get('column_quantity');		
+		$this->data['column_status'] = $this->language->get('column_status');		
+		$this->data['column_action'] = $this->language->get('column_action');		
+				
+		$this->data['button_copy'] = $this->language->get('button_copy');		
+		$this->data['button_insert'] = $this->language->get('button_insert');		
+		$this->data['button_delete'] = $this->language->get('button_delete');		
+		$this->data['button_filter'] = $this->language->get('button_filter');
+		 
+ 		$this->data['token'] = $this->session->data['token'];
+		
+ 		if (isset($this->error['warning'])) {
+			$this->data['error_warning'] = $this->error['warning'];
+		} else {
+			$this->data['error_warning'] = '';
+		}
+
+		if (isset($this->session->data['success'])) {
+			$this->data['success'] = $this->session->data['success'];
+		
+			unset($this->session->data['success']);
+		} else {
+			$this->data['success'] = '';
+		}
+
+		$url = '';
+                
+		if (isset($this->request->get['filter_email'])) {
+			$url .= '&filter_email=' . urlencode(html_entity_decode($this->request->get['filter_email'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+		if (isset($this->request->get['filter_loading_country'])) {
+			$url .= '&filter_loading_country=' . urlencode(html_entity_decode($this->request->get['filter_loading_country'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                if (isset($this->request->get['filter_offloading_country'])) {
+			$url .= '&filter_offloading_country=' . urlencode(html_entity_decode($this->request->get['filter_offloading_country'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+		if (isset($this->request->get['filter_date_added'])) {
+			$url .= '&filter_date_added=' . urlencode(html_entity_decode($this->request->get['filter_date_added'], ENT_QUOTES, 'UTF-8'));
+		}
+                 
+                if (isset($this->request->get['filter_loading_date'])) {
+			$url .= '&filter_loading_date=' . urlencode(html_entity_decode($this->request->get['filter_loading_date'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+								
+		if ($order == 'ASC') {
+			$url .= '&order=ASC';
+		} else {
+			$url .= '&order=DESC';
+		}
+
+		if (isset($this->request->get['page'])) {
+			$url .= '&page=' . $this->request->get['page'];
+		}
+					
+		$this->data['sort_name'] = $this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] . '&sort=pd.name' .  $url, 'SSL');
+		$this->data['sort_model'] = $this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] . '&sort=p.model' .  $url, 'SSL');
+		$this->data['sort_price'] = $this->url->link('catalog/freightOffer',  'token=' . $this->session->data['token'] . '&sort=p.price' .  $url, 'SSL');
+		$this->data['sort_quantity'] = $this->url->link('catalog/freightOffer',  'token=' . $this->session->data['token'] . '&sort=p.quantity' .  $url, 'SSL');
+		$this->data['sort_status'] = $this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] . '&sort=p.status' .  $url, 'SSL');
+		$this->data['sort_order'] = $this->url->link('catalog/freightOffer',  'token=' . $this->session->data['token'] . '&sort=p.sort_order' .  $url, 'SSL');
+		
+		$url = '';
+
+		if (isset($this->request->get['filter_email'])) {
+			$url .= '&filter_email=' . urlencode(html_entity_decode($this->request->get['filter_email'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+		if (isset($this->request->get['filter_loading_country'])) {
+			$url .= '&filter_loading_country=' . urlencode(html_entity_decode($this->request->get['filter_loading_country'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                if (isset($this->request->get['filter_offloading_country'])) {
+			$url .= '&filter_offloading_country=' . urlencode(html_entity_decode($this->request->get['filter_offloading_country'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+		if (isset($this->request->get['filter_date_added'])) {
+			$url .= '&filter_date_added=' . urlencode(html_entity_decode($this->request->get['filter_date_added'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                if (isset($this->request->get['filter_loading_date'])) {
+			$url .= '&filter_loading_date=' . urlencode(html_entity_decode($this->request->get['filter_loading_date'], ENT_QUOTES, 'UTF-8'));
+		}
+                
+                
+		if (isset($this->request->get['sort'])) {
+			$url .= '&sort=' . $this->request->get['sort'];
+		}
+												
+		if (isset($this->request->get['order'])) {
+			$url .= '&order=' . $this->request->get['order'];
+		}
+				
+		$pagination = new Pagination();
+		$pagination->total = $product_total;
+		$pagination->page = $page;
+		$pagination->limit = $this->config->get('config_admin_limit');
+		$pagination->text = $this->language->get('text_pagination');
+		$pagination->url = $this->url->link('catalog/freightOffer', 'token=' . $this->session->data['token'] .  $url . '&page={page}', 'SSL');
+			
+		$this->data['pagination'] = $pagination->render();
+	
+                $this->data['filter_email'] = $filter_email;
+                $this->data['filter_loading_country'] = $filter_loading_country;
+                $this->data['filter_offloading_country'] = $filter_offloading_country;
+                $this->data['filter_date_added'] = $filter_date_added;
+                $this->data['filter_loading_date'] = $filter_loading_date;
+		//$this->data['filter_name'] = $filter_name;
+		//$this->data['filter_model'] = $filter_model;
+		//$this->data['filter_price'] = $filter_price;
+		//$this->data['filter_quantity'] = $filter_quantity;
+		//$this->data['filter_status'] = $filter_status;
+		
+		$this->data['sort'] = $sort;
+		$this->data['order'] = $order;
+
+
+			//$this->template = 'catalog/freightOffer_list.tpl';
+
+		$this->template = 'catalog/freightOffer_list.tpl';
+		$this->children = array(
+			'common/header',
+			'common/footer'
+		);
+				
+		$this->response->setOutput($this->render());
+  	}
+
+  	protected function getForm() {
+    	$this->data['heading_title'] = $this->language->get('heading_title');
+ 
+    	$this->data['text_enabled'] = $this->language->get('text_enabled');
+    	$this->data['text_disabled'] = $this->language->get('text_disabled');
+    	$this->data['text_none'] = $this->language->get('text_none');
+    	$this->data['text_yes'] = $this->language->get('text_yes');
+    	$this->data['text_no'] = $this->language->get('text_no');
+		$this->data['text_plus'] = $this->language->get('text_plus');
+		$this->data['text_minus'] = $this->language->get('text_minus');
+		$this->data['text_default'] = $this->language->get('text_default');
+		$this->data['text_image_manager'] = $this->language->get('text_image_manager');
+		$this->data['text_browse'] = $this->language->get('text_browse');
+		$this->data['text_clear'] = $this->language->get('text_clear');
+		$this->data['text_option'] = $this->language->get('text_option');
+		$this->data['text_option_value'] = $this->language->get('text_option_value');
+		$this->data['text_select'] = $this->language->get('text_select');
+		$this->data['text_none'] = $this->language->get('text_none');
+		$this->data['text_percent'] = $this->language->get('text_percent');
+		$this->data['text_amount'] = $this->language->get('text_amount');
+
+		$this->data['entry_name'] = $this->language->get('entry_name');
+		$this->data['entry_meta_description'] = $this->language->get('entry_meta_description');
+		$this->data['entry_meta_keyword'] = $this->language->get('entry_meta_keyword');
+		$this->data['entry_description'] = $this->language->get('entry_description');
+		$this->data['entry_store'] = $this->language->get('entry_store');
+		$this->data['entry_keyword'] = $this->language->get('entry_keyword');
+    	$this->data['entry_model'] = $this->language->get('entry_model');
+		$this->data['entry_sku'] = $this->language->get('entry_sku');
+		$this->data['entry_upc'] = $this->language->get('entry_upc');
+		$this->data['entry_ean'] = $this->language->get('entry_ean');
+		$this->data['entry_jan'] = $this->language->get('entry_jan');
+		$this->data['entry_isbn'] = $this->language->get('entry_isbn');
+		$this->data['entry_mpn'] = $this->language->get('entry_mpn');
+		$this->data['entry_location'] = $this->language->get('entry_location');
+		$this->data['entry_minimum'] = $this->language->get('entry_minimum');
+		$this->data['entry_manufacturer'] = $this->language->get('entry_manufacturer');
+    	$this->data['entry_shipping'] = $this->language->get('entry_shipping');
+    	$this->data['entry_date_available'] = $this->language->get('entry_date_available');
+    	$this->data['entry_quantity'] = $this->language->get('entry_quantity');
+		$this->data['entry_stock_status'] = $this->language->get('entry_stock_status');
+    	$this->data['entry_price'] = $this->language->get('entry_price');
+		$this->data['entry_tax_class'] = $this->language->get('entry_tax_class');
+		$this->data['entry_points'] = $this->language->get('entry_points');
+		$this->data['entry_option_points'] = $this->language->get('entry_option_points');
+		$this->data['entry_subtract'] = $this->language->get('entry_subtract');
+    	$this->data['entry_weight_class'] = $this->language->get('entry_weight_class');
+    	$this->data['entry_weight'] = $this->language->get('entry_weight');
+		$this->data['entry_dimension'] = $this->language->get('entry_dimension');
+		$this->data['entry_length'] = $this->language->get('entry_length');
+    	$this->data['entry_image'] = $this->language->get('entry_image');
+    	$this->data['entry_download'] = $this->language->get('entry_download');
+    	$this->data['entry_category'] = $this->language->get('entry_category');
+		$this->data['entry_filter'] = $this->language->get('entry_filter');
+		$this->data['entry_related'] = $this->language->get('entry_related');
+		$this->data['entry_attribute'] = $this->language->get('entry_attribute');
+		$this->data['entry_text'] = $this->language->get('entry_text');
+		$this->data['entry_option'] = $this->language->get('entry_option');
+		$this->data['entry_option_value'] = $this->language->get('entry_option_value');
+		$this->data['entry_required'] = $this->language->get('entry_required');
+		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
+		$this->data['entry_status'] = $this->language->get('entry_status');
+		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
+		$this->data['entry_date_start'] = $this->language->get('entry_date_start');
+		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
+		$this->data['entry_priority'] = $this->language->get('entry_priority');
+		$this->data['entry_tag'] = $this->language->get('entry_tag');
+		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
+		$this->data['entry_reward'] = $this->language->get('entry_reward');
+		$this->data['entry_layout'] = $this->language->get('entry_layout');
+				
+    	$this->data['button_save'] = $this->language->get('button_save');
+    	$this->data['button_cancel'] = $this->language->get('button_cancel');
+		$this->data['button_add_attribute'] = $this->language->get('button_add_attribute');
+		$this->data['button_add_option'] = $this->language->get('button_add_option');
+		$this->data['button_add_option_value'] = $this->language->get('button_add_option_value');
+		$this->data['button_add_discount'] = $this->language->get('button_add_discount');
+		$this->data['button_add_special'] = $this->language->get('button_add_special');
+		$this->data['button_add_image'] = $this->language->get('button_add_image');
+		$this->data['button_remove'] = $this->language->get('button_remove');
+		
+    	$this->data['tab_general'] = $this->language->get('tab_general');
+    	$this->data['tab_data'] = $this->language->get('tab_data');
+		$this->data['tab_attribute'] = $this->language->get('tab_attribute');
+		$this->data['tab_option'] = $this->language->get('tab_option');		
+		$this->data['tab_discount'] = $this->language->get('tab_discount');
+		$this->data['tab_special'] = $this->language->get('tab_special');
+    	$this->data['tab_image'] = $this->language->get('tab_image');		
+		$this->data['tab_links'] = $this->language->get('tab_links');
+		$this->data['tab_reward'] = $this->language->get('tab_reward');
+		$this->data['tab_design'] = $this->language->get('tab_design');
+		 
+ 		if (isset($this->error['warning'])) {
+			$this->data['error_warning'] = $this->error['warning'];
+		} else {
+			$this->data['error_warning'] = '';
+		}
+
+ 		if (isset($this->error['name'])) {
+			$this->data['error_name'] = $this->error['name'];
+		} else {
+			$this->data['error_name'] = array();
+		}
+
+ 		if (isset($this->error['meta_description'])) {
+			$this->data['error_meta_description'] = $this->error['meta_description'];
+		} else {
+			$this->data['error_meta_description'] = array();
+		}		
+   
+   		if (isset($this->error['description'])) {
+			$this->data['error_description'] = $this->error['description'];
+		} else {
+			$this->data['error_description'] = array();
+		}	
+		
+   		if (isset($this->error['model'])) {
+			$this->data['error_model'] = $this->error['model'];
+		} else {
+			$this->data['error_model'] = '';
+		}		
+     	
+		if (isset($this->error['date_available'])) {
+			$this->data['error_date_available'] = $this->error['date_available'];
+		} else {
+			$this->data['error_date_available'] = '';
+		}	
+
+		$url = '';
+
+		if (isset($this->request->get['filter_name'])) {
+			$url .= '&filter_name=' . urlencode(html_entity_decode($this->request->get['filter_name'], ENT_QUOTES, 'UTF-8'));
+		}
+		
+		if (isset($this->request->get['filter_model'])) {
+			$url .= '&filter_model=' . urlencode(html_entity_decode($this->request->get['filter_model'], ENT_QUOTES, 'UTF-8'));
+		}
+		
+		if (isset($this->request->get['filter_price'])) {
+			$url .= '&filter_price=' . $this->request->get['filter_price'];
+		}
+		
+		if (isset($this->request->get['filter_quantity'])) {
+			$url .= '&filter_quantity=' . $this->request->get['filter_quantity'];
+		}	
+		
+		if (isset($this->request->get['filter_status'])) {
+			$url .= '&filter_status=' . $this->request->get['filter_status'];
+		}
+								
+		if (isset($this->request->get['sort'])) {
+			$url .= '&sort=' . $this->request->get['sort'];
+		}
+
+		if (isset($this->request->get['order'])) {
+			$url .= '&order=' . $this->request->get['order'];
+		}
+		
+		if (isset($this->request->get['page'])) {
+			$url .= '&page=' . $this->request->get['page'];
+		}
+
+  		$this->data['breadcrumbs'] = array();
+
+   		$this->data['breadcrumbs'][] = array(
+       		'text'      => $this->language->get('text_home'),
+			'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
+      		'separator' => false
+   		);
+
+                $this->data['breadcrumbs'][] = array(
+       		'text'      => ' account',
+			'href'      => $this->url->link('account/account', 'token=' . $this->session->data['token'], 'SSL'),
+      		'separator' => ' :: '
+   		);
+
+                                
+   		$this->data['breadcrumbs'][] = array(
+       		'text'      => "Insert new freightOffer ",
+			'href'      => $this->url->link('catalog/freightOffer/insert', 'token=' . $this->session->data['token'] .  $url, 'SSL'),       		
+      		'separator' => ' :: '
+   		);
+									
+		if (!isset($this->request->get['product_id'])) {
+			$this->data['action'] = $this->url->link('catalog/freightOffer/insert', 'token=' . $this->session->data['token'] . $url, 'SSL');
+		} else {
+			$this->data['action'] = $this->url->link('catalog/freightOffer/update', 'token=' . $this->session->data['token'] . '&product_id=' . $this->request->get['product_id'] . $url, 'SSL');
+		}
+                
+                if (isset($this->request->get['customer_id'])) {
+			$this->data['customer_id'] = $this->request->get['customer_id'];
+		} else {
+			$this->data['customer_id'] = 0;
+		}      
+		
+		$this->data['cancel'] = $this->url->link('sale/customer/update','token=' . $this->session->data['token'] .'&customer_id='. $this->data['customer_id'] . $url, 'SSL');
+
+		if (isset($this->request->get['product_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
+      		$product_info = $this->model_catalog_freightOffer->getProduct($this->request->get['product_id']);
+    	}
+        
+                              
+                
+		$this->data['token'] = $this->session->data['token'];
+		
+		$this->load->model('localisation/language');
+		
+		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		
+		if (isset($this->request->post['product_description'])) {
+			$this->data['product_description'] = $this->request->post['product_description'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['product_description'] = $this->model_catalog_freightOffer->getProductDescriptions($this->request->get['product_id']);
+		} else {
+			$this->data['product_description'] = array();
+		}
+		
+	/*	if (isset($this->request->post['model'])) {
+      		$this->data['model'] = $this->request->post['model'];
+    	} elseif (!empty($product_info)) {
+			$this->data['model'] = $product_info['model'];
+		} else {
+      		$this->data['model'] = '';
+    	}   */
+                
+                $this->load->model('localisation/country');    
+                $coutries_total = $this->model_localisation_country->getCountries();                    
+                
+                $this->data['coutries_total'] = $coutries_total;
+                
+                if (isset($this->request->post['loading_country_id'])) 
+                    {
+                    $loading_coutry = $this->model_localisation_country->getCountry( $this->request->post['loading_country_id'] );
+                    if (isset($loading_coutry['name']))
+                            {
+                            $this->data['loading_country_id'] = $this->request->post['loading_country_id'];
+                            $this->data['loading_country'] = $loading_coutry['name'];
+                            }
+                    } 
+                elseif (!empty($product_info)) 
+                    {
+                        $loading_coutry = $this->model_localisation_country->getCountry( $product_info['loading_country_id'] );
+			if (isset($loading_coutry['name']))
+                            {
+                            $this->data['loading_country_id'] =  $product_info['loading_country_id'];
+                            $this->data['loading_country'] =  $loading_coutry['name'];
+                            }
+                    } 
+                else 
+                    {
+                    $this->data['loading_country_id'] = '';
+                     $this->data['loading_country'] = '';
+                    }
+        
+                    
+                if (isset($this->request->post['loading_city'])) 
+                    {
+                    $this->data['loading_city'] = $this->request->post['loading_city'];
+                    } 
+                elseif (!empty($product_info)) 
+                    {
+                    $this->data['loading_city'] = $product_info['loading_city'];
+                    }
+                else 
+                    {
+                    $this->data['loading_city'] = '';
+                    }
+        
+                    
+               if (isset($this->request->post['offloading_country_id'])) 
+                    {
+                   $offloading_coutry = $this->model_localisation_country->getCountry( $this->request->post['offloading_country_id'] );
+                   if (isset($offloading_coutry['name']))
+                            {
+                            $this->data['offloading_country_id'] = $this->request->post['offloading_country_id'];
+                            $this->data['offloading_country'] = $offloading_coutry['name'];
+                            }
+                    } 
+               elseif (!empty($product_info)) 
+                    {
+                    $offloading_coutry = $this->model_localisation_country->getCountry( $product_info['offloading_country_id'] );  
+                    if (isset($offloading_coutry['name']))
+                        {
+                        $this->data['offloading_country_id'] = $product_info['offloading_country_id'];
+                        $this->data['offloading_country'] = $loading_coutry['name'];
+                        }
+                    }
+              else  {
+                    $this->data['offloading_country_id'] = '';
+                    $this->data['offloading_country'] = '';
+                    }
+                    
+        
+        if (isset($this->request->post['offloading_city'])) {
+      		$this->data['offloading_city'] = $this->request->post['offloading_city'];
+    	} elseif (!empty($product_info)) {
+			$this->data['offloading_city'] = $product_info['offloading_city'];
+		} else {
+      		$this->data['offloading_city'] = '';
+    	}
+               
+        if (isset($this->request->post['loading_date'])) {
+      		$this->data['loading_date'] = $this->request->post['loading_date'];
+    	} elseif (!empty($product_info)) {
+			$this->data['loading_date'] = $product_info['loading_date'];
+		} else {
+      		$this->data['loading_date'] = '';
+    	}
+        
+        
+       if (isset($this->request->post['treiler_type_id'])) {
+      		$this->data['treiler_type_id'] = $this->request->post['treiler_type_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['treiler_type_id'] = $product_info['trailer_type_id'];
+		} else {
+      		$this->data['treiler_type_id'] = '';
+    	}
+        
+        if (isset($this->request->post['est_date'])) {
+      		$this->data['est_date'] = $this->request->post['est_date'];
+    	} elseif (!empty($product_info)) {
+			$this->data['est_date'] = $product_info['est_date'];
+		} else {
+      		$this->data['est_date'] = '';
+    	}
+        
+        if (isset($this->request->post['freightOffer_type_id'])) {
+      		$this->data['freightOffer_type_id'] = $this->request->post['freightOffer_type_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['freightOffer_type_id'] = $product_info['freightOffer_type_id'];
+		} else {
+      		$this->data['freightOffer_type_id'] = '';
+    	}
+        
+        if (isset($this->request->post['freightOffer_params'])) {
+      		$this->data['freightOffer_params'] = $this->request->post['freightOffer_params'];
+    	} elseif (!empty($product_info)) {
+			$this->data['freightOffer_params'] = $product_info['freightOffer_params'];
+		} else {
+      		$this->data['freightOffer_params'] = '';
+    	}  
+        
+        if (isset($this->request->post['weight_tons'])) {
+      		$this->data['weight_tons'] = $this->request->post['weight_tons'];
+    	} elseif (!empty($product_info)) {
+			$this->data['weight_tons'] = $product_info['weight_tons'];
+		} else {
+      		$this->data['weight_tons'] = '';
+    	}  
+        
+        if (isset($this->request->post['pallets_no'])) {
+      		$this->data['pallets_no'] = $this->request->post['pallets_no'];
+    	} elseif (!empty($product_info)) {
+			$this->data['pallets_no'] = $product_info['pallets_no'];
+		} else {
+      		$this->data['pallets_no'] = '';
+    	}  
+               
+        if (isset($this->request->post['loading_zone_id'])) {
+      		$this->data['loading_zone_id'] = $this->request->post['loading_zone_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['loading_zone_id'] = $product_info['loading_zone_id'];
+		} else {
+      		$this->data['loading_zone_id'] = '';
+    	}  
+        
+        if (isset($this->request->post['loading_zip'])) {
+      		$this->data['loading_zip'] = $this->request->post['loading_zip'];
+    	} elseif (!empty($product_info)) {
+			$this->data['loading_zip'] = $product_info['loading_zip'];
+		} else {
+      		$this->data['loading_zip'] = '';
+    	}  
+        
+        if (isset($this->request->post['loading_time'])) {
+      		$this->data['loading_time'] = $this->request->post['loading_time'];
+    	} elseif (!empty($product_info)) {
+			$this->data['loading_time'] = $product_info['loading_time'];
+		} else {
+      		$this->data['loading_time'] = '';
+    	}  
+        
+        if (isset($this->request->post['offloading_zone_id'])) {
+      		$this->data['offloading_zone_id'] = $this->request->post['offloading_zone_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['offloading_zone_id'] = $product_info['offloading_zone_id'];
+		} else {
+      		$this->data['offloading_zone_id'] = '';
+    	} 
+        
+        if (isset($this->request->post['offloading_zip'])) {
+      		$this->data['offloading_zip'] = $this->request->post['offloading_zip'];
+    	} elseif (!empty($product_info)) {
+			$this->data['offloading_zip'] = $product_info['offloading_zip'];
+		} else {
+      		$this->data['offloading_zip'] = '';
+    	} 
+        
+        if (isset($this->request->post['offloading_time'])) {
+      		$this->data['offloading_time'] = $this->request->post['offloading_time'];
+    	} elseif (!empty($product_info)) {
+			$this->data['offloading_time'] = $product_info['offloading_time'];
+		} else {
+      		$this->data['offloading_time'] = '';
+    	} 
+        
+        if (isset($this->request->post['freightOffer_number'])) {
+      		$this->data['freightOffer_number'] = $this->request->post['freightOffer_number'];
+    	} elseif (!empty($product_info)) {
+			$this->data['freightOffer_number'] = $product_info['freightOffer_number'];
+		} else {
+      		$this->data['freightOffer_number'] = '';
+    	} 
+        
+        if (isset($this->request->post['exchangeable'])) {
+      		$this->data['exchangeable'] = $this->request->post['exchangeable'];
+    	} elseif (!empty($product_info)) {
+			$this->data['exchangeable'] = $product_info['exchangeable'];
+		} else {
+      		$this->data['exchangeable'] = '';
+    	} 
+        
+        if (isset($this->request->post['stackable'])) {
+      		$this->data['stackable'] = $this->request->post['stackable'];
+    	} elseif (!empty($product_info)) {
+			$this->data['stackable'] = $product_info['stackable'];
+		} else {
+      		$this->data['stackable'] = '';
+    	} 
+        
+        if (isset($this->request->post['volume_unit'])) {
+      		$this->data['volume_unit'] = $this->request->post['volume_unit'];
+    	} elseif (!empty($product_info)) {
+			$this->data['volume_unit'] = $product_info['volume_unit'];
+		} else {
+      		$this->data['volume_unit'] = '';
+    	} 
+        
+        if (isset($this->request->post['volume_unit_type'])) {
+      		$this->data['volume_unit_type'] = $this->request->post['volume_unit_type'];
+    	} elseif (!empty($product_info)) {
+			$this->data['volume_unit_type'] = $product_info['volume_unit_type'];
+		} else {
+      		$this->data['volume_unit_type'] = '';
+    	} 
+                      
+        
+        if (isset($this->request->post['adr'])) {
+      		$this->data['adr'] = $this->request->post['adr'];
+    	} elseif (!empty($product_info)) {
+			$this->data['adr'] = $product_info['adr'];
+		} else {
+      		$this->data['adr'] = '';
+    	} 
+        
+                if (isset($this->request->post['tir'])) {
+      		$this->data['tir'] = $this->request->post['tir'];
+    	} elseif (!empty($product_info)) {
+			$this->data['tir'] = $product_info['tir'];
+		} else {
+      		$this->data['tir'] = '';
+    	} 
+        
+        
+                if (isset($this->request->post['cmr'])) {
+      		$this->data['cmr'] = $this->request->post['cmr'];
+    	} elseif (!empty($product_info)) {
+			$this->data['cmr'] = $product_info['cmr'];
+		} else {
+      		$this->data['cmr'] = '';
+    	} 
+        
+        
+                if (isset($this->request->post['cemt'])) {
+      		$this->data['cemt'] = $this->request->post['cemt'];
+    	} elseif (!empty($product_info)) {
+			$this->data['cemt'] = $product_info['cemt'];
+		} else {
+      		$this->data['cemt'] = '';
+    	} 
+        
+        
+                if (isset($this->request->post['t1'])) {
+      		$this->data['t1'] = $this->request->post['t1'];
+    	} elseif (!empty($product_info)) {
+			$this->data['t1'] = $product_info['t1'];
+		} else {
+      		$this->data['t1'] = '';
+    	} 
+        
+                if (isset($this->request->post['ex1'])) {
+      		$this->data['ex1'] = $this->request->post['ex1'];
+    	} elseif (!empty($product_info)) {
+			$this->data['ex1'] = $product_info['ex1'];
+		} else {
+      		$this->data['ex1'] = '';
+    	} 
+        
+                if (isset($this->request->post['freightOffer_loading_type_id'])) {
+      		$this->data['freightOffer_loading_type_id'] = $this->request->post['freightOffer_loading_type_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['freightOffer_loading_type_id'] = $product_info['freightOffer_loading_type_id'];
+		} else {
+      		$this->data['freightOffer_loading_type_id'] = '';
+    	} 
+        
+                if (isset($this->request->post['freightOffer_rate'])) {
+      		$this->data['freightOffer_rate'] = $this->request->post['freightOffer_rate'];
+    	} elseif (!empty($product_info)) {
+			$this->data['freightOffer_rate'] = $product_info['freightOffer_rate'];
+		} else {
+      		$this->data['freightOffer_rate'] = '';
+    	} 
+        
+                if (isset($this->request->post['payment_terms_id'])) {
+      		$this->data['payment_terms_id'] = $this->request->post['payment_terms_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['payment_terms_id'] = $product_info['payment_terms_id'];
+		} else {
+      		$this->data['payment_terms_id'] = '';
+    	} 
+        
+                if (isset($this->request->post['payment_method_id'])) {
+      		$this->data['payment_method_id'] = $this->request->post['payment_method_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['payment_method_id'] = $product_info['payment_method_id'];
+		} else {
+      		$this->data['payment_method_id'] = '';
+    	} 
+                                 
+                        if (isset($this->request->post['lift'])) {
+      		$this->data['lift'] = $this->request->post['lift'];
+    	} elseif (!empty($product_info)) {
+			$this->data['lift'] = $product_info['lift'];
+		} else {
+      		$this->data['lift'] = '';
+    	} 
+        
+                        if (isset($this->request->post['manipulator'])) {
+      		$this->data['manipulator'] = $this->request->post['manipulator'];
+    	} elseif (!empty($product_info)) {
+			$this->data['manipulator'] = $product_info['manipulator'];
+		} else {
+      		$this->data['manipulator'] = '';
+    	} 
+                        if (isset($this->request->post['description'])) {
+      		$this->data['description'] = $this->request->post['description'];
+    	} elseif (!empty($product_info)) {
+			$this->data['description'] = $product_info['description'];
+		} else {
+      		$this->data['description'] = '';
+    	} 
+        
+                        if (isset($this->request->post['frequency'])) {
+      		$this->data['frequency'] = $this->request->post['frequency'];
+    	} elseif (!empty($product_info)) {
+			$this->data['frequency'] = $product_info['frequency'];
+		} else {
+      		$this->data['frequency'] = '';
+    	} 
+        
+        if (isset($this->request->post['freightOffer_number'])) {
+      		$this->data['freightOffer_number'] = $this->request->post['freightOffer_number'];
+    	} elseif (!empty($product_info)) {
+			$this->data['freightOffer_number'] = $product_info['freightOffer_number'];
+		} else {
+      		$this->data['freightOffer_number'] = '';
+    	}     
+        
+        
+     
+        
+        $this->load->model('catalog/freightOfferType');    
+        $freightOffer_total = $this->model_catalog_freightOfferType->getFreightOffers();       
+        $this->data['freightOffer_total'] = $freightOffer_total;
+        
+        $this->load->model('catalog/treiler');    
+        $treiler_total = $this->model_catalog_treiler->getTreilers();     
+        $this->data['treiler_total'] = $treiler_total;
+        
+         $this->load->model('catalog/freightOfferLoadingType');    
+        $freightOffer_loading_types = $this->model_catalog_freightOfferLoadingType->getLoadingTypes();       
+        $this->data['freightOffer_loading_types'] = $freightOffer_loading_types;
+        
+        $this->load->model('catalog/freightOfferPaymentMethod');    
+        $freightOffer_payment_methods = $this->model_catalog_freightOfferPaymentMethod->getPaymentMethods();       
+        $this->data['freightOffer_payment_methods'] = $freightOffer_payment_methods;
+        
+        $this->load->model('catalog/freightOfferPaymentTerms');    
+        $freightOffer_payment_terms = $this->model_catalog_freightOfferPaymentTerms->getPaymentTerms();       
+        $this->data['freightOffer_payment_terms'] = $freightOffer_payment_terms;
+
+		$this->load->model('setting/store');
+		
+		$this->data['stores'] = $this->model_setting_store->getStores();
+		
+		if (isset($this->request->post['product_store'])) {
+			$this->data['product_store'] = $this->request->post['product_store'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['product_store'] = $this->model_catalog_freightOffer->getProductStores($this->request->get['product_id']);
+		} else {
+			$this->data['product_store'] = array(0);
+		}	
+		
+		if (isset($this->request->post['keyword'])) {
+			$this->data['keyword'] = $this->request->post['keyword'];
+		} elseif (!empty($product_info)) {
+			$this->data['keyword'] = $product_info['keyword'];
+		} else {
+			$this->data['keyword'] = '';
+		}
+		
+		if (isset($this->request->post['image'])) {
+			$this->data['image'] = $this->request->post['image'];
+		} elseif (!empty($product_info)) {
+			$this->data['image'] = $product_info['image'];
+		} else {
+			$this->data['image'] = '';
+		}
+		
+		$this->load->model('tool/image');
+		
+		if (isset($this->request->post['image']) && file_exists(DIR_IMAGE . $this->request->post['image'])) {
+			$this->data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+		} elseif (!empty($product_info) && $product_info['image'] && file_exists(DIR_IMAGE . $product_info['image'])) {
+			$this->data['thumb'] = $this->model_tool_image->resize($product_info['image'], 100, 100);
+		} else {
+			$this->data['thumb'] = $this->model_tool_image->resize('no_image.jpg', 100, 100);
+		}
+		
+    /*	if (isset($this->request->post['shipping'])) {
+      		$this->data['shipping'] = $this->request->post['shipping'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['shipping'] = $product_info['shipping'];
+    	} else {
+			$this->data['shipping'] = 1;
+		}
+		
+    	if (isset($this->request->post['price'])) {
+      		$this->data['price'] = $this->request->post['price'];
+    	} elseif (!empty($product_info)) {
+			$this->data['price'] = $product_info['price'];
+		} else {
+      		$this->data['price'] = '';
+    	}*/
+		
+		//$this->load->model('localisation/tax_class');
+		
+		//$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+    	
+	/*	if (isset($this->request->post['tax_class_id'])) {
+      		$this->data['tax_class_id'] = $this->request->post['tax_class_id'];
+    	} elseif (!empty($product_info)) {
+			$this->data['tax_class_id'] = $product_info['tax_class_id'];
+		} else {
+      		$this->data['tax_class_id'] = 0;
+    	}*/
+		      	
+		if (isset($this->request->post['date_available'])) {
+       		$this->data['date_available'] = $this->request->post['date_available'];
+		} elseif (!empty($product_info)) {
+			$this->data['date_available'] = date('Y-m-d', strtotime($product_info['date_available']));
+		} else {
+			$this->data['date_available'] = date('Y-m-d', time() - 86400);
+		}
+											
+    /*	if (isset($this->request->post['quantity'])) {
+      		$this->data['quantity'] = $this->request->post['quantity'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['quantity'] = $product_info['quantity'];
+    	} else {
+			$this->data['quantity'] = 1;
+		}
+		
+		if (isset($this->request->post['minimum'])) {
+      		$this->data['minimum'] = $this->request->post['minimum'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['minimum'] = $product_info['minimum'];
+    	} else {
+			$this->data['minimum'] = 1;
+		}
+		
+		if (isset($this->request->post['subtract'])) {
+      		$this->data['subtract'] = $this->request->post['subtract'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['subtract'] = $product_info['subtract'];
+    	} else {
+			$this->data['subtract'] = 1;
+		}*/
+		
+		if (isset($this->request->post['sort_order'])) {
+      		$this->data['sort_order'] = $this->request->post['sort_order'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['sort_order'] = $product_info['sort_order'];
+    	} else {
+			$this->data['sort_order'] = 1;
+		}
+
+		//$this->load->model('localisation/stock_status');
+		
+		//$this->data['stock_statuses'] = $this->model_localisation_stock_status->getStockStatuses();
+    	
+		/*if (isset($this->request->post['stock_status_id'])) {
+      		$this->data['stock_status_id'] = $this->request->post['stock_status_id'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['stock_status_id'] = $product_info['stock_status_id'];
+    	} else {
+			$this->data['stock_status_id'] = $this->config->get('config_stock_status_id');
+		}*/
+				
+    	if (isset($this->request->post['status'])) {
+      		$this->data['status'] = $this->request->post['status'];
+    	} elseif (!empty($product_info)) {
+			$this->data['status'] = $product_info['status'];
+		} else {
+      		$this->data['status'] = 1;
+    	}
+
+    	/*if (isset($this->request->post['weight'])) {
+      		$this->data['weight'] = $this->request->post['weight'];
+		} elseif (!empty($product_info)) {
+			$this->data['weight'] = $product_info['weight'];
+    	} else {
+      		$this->data['weight'] = '';
+    	} */
+		
+		//$this->load->model('localisation/weight_class');
+		
+		//$this->data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
+    	
+	/*	if (isset($this->request->post['weight_class_id'])) {
+      		$this->data['weight_class_id'] = $this->request->post['weight_class_id'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['weight_class_id'] = $product_info['weight_class_id'];
+		} else {
+      		$this->data['weight_class_id'] = $this->config->get('config_weight_class_id');
+    	}
+		
+		if (isset($this->request->post['length'])) {
+      		$this->data['length'] = $this->request->post['length'];
+    	} elseif (!empty($product_info)) {
+			$this->data['length'] = $product_info['length'];
+		} else {
+      		$this->data['length'] = '';
+    	}
+		
+		if (isset($this->request->post['width'])) {
+      		$this->data['width'] = $this->request->post['width'];
+		} elseif (!empty($product_info)) {	
+			$this->data['width'] = $product_info['width'];
+    	} else {
+      		$this->data['width'] = '';
+    	}
+		
+		if (isset($this->request->post['height'])) {
+      		$this->data['height'] = $this->request->post['height'];
+		} elseif (!empty($product_info)) {
+			$this->data['height'] = $product_info['height'];
+    	} else {
+      		$this->data['height'] = '';
+    	}*/
+
+		//$this->load->model('localisation/length_class');
+		
+	//	$this->data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
+    	
+	/*	if (isset($this->request->post['length_class_id'])) {
+      		$this->data['length_class_id'] = $this->request->post['length_class_id'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['length_class_id'] = $product_info['length_class_id'];
+    	} else {
+      		$this->data['length_class_id'] = $this->config->get('config_length_class_id');
+		}*/
+
+	//	$this->load->model('catalog/manufacturer');
+		
+    /*	if (isset($this->request->post['manufacturer_id'])) {
+      		$this->data['manufacturer_id'] = $this->request->post['manufacturer_id'];
+		} elseif (!empty($product_info)) {
+			$this->data['manufacturer_id'] = $product_info['manufacturer_id'];
+		} else {
+      		$this->data['manufacturer_id'] = 0;
+    	} 		
+		
+    	if (isset($this->request->post['manufacturer'])) {
+      		$this->data['manufacturer'] = $this->request->post['manufacturer'];
+		} elseif (!empty($product_info)) {
+			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
+			
+			if ($manufacturer_info) {		
+				$this->data['manufacturer'] = $manufacturer_info['name'];
+			} else {
+				$this->data['manufacturer'] = '';
+			}	
+		} else {
+      		$this->data['manufacturer'] = '';
+    	} */
+		
+		// Categories
+	/*	$this->load->model('catalog/category');
+		
+		if (isset($this->request->post['product_category'])) {
+			$categories = $this->request->post['product_category'];
+		} elseif (isset($this->request->get['freightOffer_id'])) {		
+			$categories = $this->model_catalog_freightOffer->getProductCategories($this->request->get['freightOffer_id']);
+		} else {
+			$categories = array();
+		}*/
+	
+		//$this->data['product_categories'] = array();
+		
+		/*foreach ($categories as $category_id) {
+			$category_info = $this->model_catalog_category->getCategory($category_id);
+			
+			if ($category_info) {
+				$this->data['product_categories'][] = array(
+					'category_id' => $category_info['category_id'],
+					'name'        => ($category_info['path'] ? $category_info['path'] . ' &gt; ' : '') . $category_info['name']
+				);
+			}
+		}
+		*/
+		// Filters
+		$this->load->model('catalog/filter');
+		
+		if (isset($this->request->post['product_filter'])) {
+			$filters = $this->request->post['product_filter'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$filters = $this->model_catalog_freightOffer->getProductFilters($this->request->get['product_id']);
+		} else {
+			$filters = array();
+		}
+		
+		$this->data['product_filters'] = array();
+		
+		foreach ($filters as $filter_id) {
+			$filter_info = $this->model_catalog_filter->getFilter($filter_id);
+			
+			if ($filter_info) {
+				$this->data['product_filters'][] = array(
+					'filter_id' => $filter_info['filter_id'],
+					'name'      => $filter_info['group'] . ' &gt; ' . $filter_info['name']
+				);
+			}
+		}		
+		
+		// Attributes
+		$this->load->model('catalog/attribute');
+		
+		if (isset($this->request->post['product_attribute'])) {
+			$product_attributes = $this->request->post['product_attribute'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$product_attributes = $this->model_catalog_freightOffer->getProductAttributes($this->request->get['product_id']);
+		} else {
+			$product_attributes = array();
+		}
+		
+		$this->data['product_attributes'] = array();
+		
+		foreach ($product_attributes as $product_attribute) {
+			$attribute_info = $this->model_catalog_attribute->getAttribute($product_attribute['attribute_id']);
+			
+			if ($attribute_info) {
+				$this->data['product_attributes'][] = array(
+					'attribute_id'                  => $product_attribute['attribute_id'],
+					'name'                          => $attribute_info['name'],
+					'product_attribute_description' => $product_attribute['product_attribute_description']
+				);
+			}
+		}		
+		
+		// Options
+		$this->load->model('catalog/option');
+		
+		if (isset($this->request->post['product_option'])) {
+			$product_options = $this->request->post['product_option'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$product_options = $this->model_catalog_freightOffer->getProductOptions($this->request->get['product_id']);			
+		} else {
+			$product_options = array();
+		}			
+		
+		$this->data['product_options'] = array();
+			
+		foreach ($product_options as $product_option) {
+			if ($product_option['type'] == 'select' || $product_option['type'] == 'radio' || $product_option['type'] == 'checkbox' || $product_option['type'] == 'image') {
+				$product_option_value_data = array();
+				
+				foreach ($product_option['product_option_value'] as $product_option_value) {
+					$product_option_value_data[] = array(
+						'product_option_value_id' => $product_option_value['product_option_value_id'],
+						'option_value_id'         => $product_option_value['option_value_id'],
+						'quantity'                => $product_option_value['quantity'],
+						'subtract'                => $product_option_value['subtract'],
+						'price'                   => $product_option_value['price'],
+						'price_prefix'            => $product_option_value['price_prefix'],
+						'points'                  => $product_option_value['points'],
+						'points_prefix'           => $product_option_value['points_prefix'],						
+						'weight'                  => $product_option_value['weight'],
+						'weight_prefix'           => $product_option_value['weight_prefix']	
+					);
+				}
+				
+				$this->data['product_options'][] = array(
+					'product_option_id'    => $product_option['product_option_id'],
+					'product_option_value' => $product_option_value_data,
+					'option_id'            => $product_option['option_id'],
+					'name'                 => $product_option['name'],
+					'type'                 => $product_option['type'],
+					'required'             => $product_option['required']
+				);				
+			} else {
+				$this->data['product_options'][] = array(
+					'product_option_id' => $product_option['product_option_id'],
+					'option_id'         => $product_option['option_id'],
+					'name'              => $product_option['name'],
+					'type'              => $product_option['type'],
+					'option_value'      => $product_option['option_value'],
+					'required'          => $product_option['required']
+				);				
+			}
+		}
+		
+		$this->data['option_values'] = array();
+		
+		foreach ($this->data['product_options'] as $product_option) {
+			if ($product_option['type'] == 'select' || $product_option['type'] == 'radio' || $product_option['type'] == 'checkbox' || $product_option['type'] == 'image') {
+				if (!isset($this->data['option_values'][$product_option['option_id']])) {
+					$this->data['option_values'][$product_option['option_id']] = $this->model_catalog_option->getOptionValues($product_option['option_id']);
+				}
+			}
+		}
+		
+		$this->load->model('sale/customer_group');
+		
+		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		
+		if (isset($this->request->post['product_discount'])) {
+			$this->data['product_discounts'] = $this->request->post['product_discount'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['product_discounts'] = $this->model_catalog_freightOffer->getProductDiscounts($this->request->get['product_id']);
+		} else {
+			$this->data['product_discounts'] = array();
+		}
+
+		if (isset($this->request->post['product_special'])) {
+			$this->data['product_specials'] = $this->request->post['product_special'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['product_specials'] = $this->model_catalog_freightOffer->getProductSpecials($this->request->get['product_id']);
+		} else {
+			$this->data['product_specials'] = array();
+		}
+		
+		// Images
+		if (isset($this->request->post['product_image'])) {
+			$product_images = $this->request->post['product_image'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$product_images = $this->model_catalog_freightOffer->getProductImages($this->request->get['product_id']);
+		} else {
+			$product_images = array();
+		}
+		
+		$this->data['product_images'] = array();
+		
+		foreach ($product_images as $product_image) {
+			if ($product_image['image'] && file_exists(DIR_IMAGE . $product_image['image'])) {
+				$image = $product_image['image'];
+			} else {
+				$image = 'no_image.jpg';
+			}
+			
+			$this->data['product_images'][] = array(
+				'image'      => $image,
+				'thumb'      => $this->model_tool_image->resize($image, 100, 100),
+				'sort_order' => $product_image['sort_order']
+			);
+		}
+
+		$this->data['no_image'] = $this->model_tool_image->resize('no_image.jpg', 100, 100);
+
+		// Downloads
+		$this->load->model('catalog/download');
+		
+		if (isset($this->request->post['product_download'])) {
+			$product_downloads = $this->request->post['product_download'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$product_downloads = $this->model_catalog_freightOffer->getProductDownloads($this->request->get['product_id']);
+		} else {
+			$product_downloads = array();
+		}
+			
+		$this->data['product_downloads'] = array();
+		
+		foreach ($product_downloads as $download_id) {
+			$download_info = $this->model_catalog_download->getDownload($download_id);
+			
+			if ($download_info) {
+				$this->data['product_downloads'][] = array(
+					'download_id' => $download_info['download_id'],
+					'name'        => $download_info['name']
+				);
+			}
+		}
+		
+		if (isset($this->request->post['product_related'])) {
+			$products = $this->request->post['product_related'];
+		} elseif (isset($this->request->get['product_id'])) {		
+			$products = $this->model_catalog_freightOffer->getProductRelated($this->request->get['product_id']);
+		} else {
+			$products = array();
+		}
+	
+		$this->data['product_related'] = array();
+		
+		foreach ($products as $product_id) {
+			$related_info = $this->model_catalog_freightOffer->getProduct($product_id);
+			
+			if ($related_info) {
+				$this->data['product_related'][] = array(
+					'product_id' => $related_info['product_id'],
+					'name'       => $related_info['name']
+				);
+			}
+		}
+
+    	/*if (isset($this->request->post['points'])) {
+      		$this->data['points'] = $this->request->post['points'];
+    	} elseif (!empty($product_info)) {
+			$this->data['points'] = $product_info['points'];
+		} else {
+      		$this->data['points'] = '';
+    	}*/
+						
+		if (isset($this->request->post['product_reward'])) {
+			$this->data['product_reward'] = $this->request->post['product_reward'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['product_reward'] = $this->model_catalog_freightOffer->getProductRewards($this->request->get['product_id']);
+		} else {
+			$this->data['product_reward'] = array();
+		}
+		
+		if (isset($this->request->post['product_layout'])) {
+			$this->data['product_layout'] = $this->request->post['product_layout'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['product_layout'] = $this->model_catalog_freightOffer->getProductLayouts($this->request->get['product_id']);
+		} else {
+			$this->data['product_layout'] = array();
+		}
+
+		$this->load->model('design/layout');
+		
+		//$this->data['layouts'] = $this->model_design_layout->getLayout();
+			
+
+			$this->template = 'catalog/freightOffer_form.tpl';
+
+                
+		//$this->template = 'catalog/freightOffer_form.tpl';
+		$this->children = array(
+			'common/header',
+			'common/footer'
+		);
+				
+		$this->response->setOutput($this->render());
+  	} 
+	
+  	protected function validateForm() { 
+    	/*if (!$this->user->hasPermission('modify', 'catalog/freightOffer')) {
+      		$this->error['warning'] = $this->language->get('error_permission');
+    	}*/
+
+        /*    foreach ($this->request->post['product_description'] as $language_id => $value) {
+                    if ((utf8_strlen($value['name']) < 1) || (utf8_strlen($value['name']) > 255)) {
+                            $this->error['name'][$language_id] = $this->language->get('error_name');
+                    }
+            }
+
+            if ((utf8_strlen($this->request->post['model']) < 1) || (utf8_strlen($this->request->post['model']) > 64)) {
+                    $this->error['model'] = $this->language->get('error_model');
+            }
+
+                    if ($this->error && !isset($this->error['warning'])) {
+                            $this->error['warning'] = $this->language->get('error_warning');
+                    }
+
+            if (!$this->error) {
+                            return true;
+            } else {
+                    return false;
+            }*/
+            return true;
+  	}
+	
+  	protected function validateDelete() {
+    /*	if (!$this->user->hasPermission('modify', 'catalog/freightOffer')) {
+      		$this->error['warning'] = $this->language->get('error_permission');  
+    	}*/
+		
+		if (!$this->error) {
+	  		return true;
+		} else {
+	  		return false;
+		}
+  	}
+  	
+  	protected function validateCopy() {
+    	/*if (!$this->user->hasPermission('modify', 'catalog/freightOffer')) {
+      		$this->error['warning'] = $this->language->get('error_permission');  
+    	}*/
+		
+		if (!$this->error) {
+	  		return true;
+		} else {
+	  		return false;
+		}
+  	}
+		
+	public function autocomplete() {
+		$json = array();
+		
+		if (isset($this->request->get['filter_name']) || isset($this->request->get['filter_model']) || isset($this->request->get['filter_category_id'])) {
+			$this->load->model('catalog/freightOffer');
+			$this->load->model('catalog/option');
+			
+			if (isset($this->request->get['filter_name'])) {
+				$filter_name = $this->request->get['filter_name'];
+			} else {
+				$filter_name = '';
+			}
+			
+			if (isset($this->request->get['filter_model'])) {
+				$filter_model = $this->request->get['filter_model'];
+			} else {
+				$filter_model = '';
+			}
+			
+			if (isset($this->request->get['limit'])) {
+				$limit = $this->request->get['limit'];	
+			} else {
+				$limit = 20;	
+			}			
+						
+			$data = array(
+				'filter_name'  => $filter_name,
+				'filter_model' => $filter_model,
+				'start'        => 0,
+				'limit'        => $limit
+			);
+			
+			$results = $this->model_catalog_freightOffer->getProducts($data);
+			
+			foreach ($results as $result) {
+				$option_data = array();
+				
+				$product_options = $this->model_catalog_freightOffer->getProductOptions($result['product_id']);	
+				
+				foreach ($product_options as $product_option) {
+					$option_info = $this->model_catalog_option->getOption($product_option['option_id']);
+					
+					if ($option_info) {				
+						if ($option_info['type'] == 'select' || $option_info['type'] == 'radio' || $option_info['type'] == 'checkbox' || $option_info['type'] == 'image') {
+							$option_value_data = array();
+							
+							foreach ($product_option['product_option_value'] as $product_option_value) {
+								$option_value_info = $this->model_catalog_option->getOptionValue($product_option_value['option_value_id']);
+						
+								if ($option_value_info) {
+									$option_value_data[] = array(
+										'product_option_value_id' => $product_option_value['product_option_value_id'],
+										'option_value_id'         => $product_option_value['option_value_id'],
+										'name'                    => $option_value_info['name'],
+										'price'                   => (float)$product_option_value['price'] ? $this->currency->format($product_option_value['price'], $this->config->get('config_currency')) : false,
+										'price_prefix'            => $product_option_value['price_prefix']
+									);
+								}
+							}
+						
+							$option_data[] = array(
+								'product_option_id' => $product_option['product_option_id'],
+								'option_id'         => $product_option['option_id'],
+								'name'              => $option_info['name'],
+								'type'              => $option_info['type'],
+								'option_value'      => $option_value_data,
+								'required'          => $product_option['required']
+							);	
+						} else {
+							$option_data[] = array(
+								'product_option_id' => $product_option['product_option_id'],
+								'option_id'         => $product_option['option_id'],
+								'name'              => $option_info['name'],
+								'type'              => $option_info['type'],
+								'option_value'      => $product_option['option_value'],
+								'required'          => $product_option['required']
+							);				
+						}
+					}
+				}
+					
+				$json[] = array(
+					'product_id' => $result['product_id'],
+					'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),	
+					'model'      => $result['model'],
+					'option'     => $option_data,
+					'price'      => $result['price']
+				);	
+			}
+		}
+
+		$this->response->setOutput(json_encode($json));
+	}
+        
+        
+        public function country() {
+		
+            $data = $_GET['country_id'];  //$data will contain the_id
+//do some processing
+//echo $data;
+            $results = array();
+		
+		$this->load->model('localisation/country');
+
+                $country_info = $this->model_localisation_country->getCountry($data);
+		
+		if ($country_info) {
+			$this->load->model('localisation/zone');
+
+			$results = array(
+				'country_id'        => $country_info['country_id'],
+				'name'              => $country_info['name'],
+				'iso_code_2'        => $country_info['iso_code_2'],
+				'iso_code_3'        => $country_info['iso_code_3'],
+				'address_format'    => $country_info['address_format'],
+				'postcode_required' => $country_info['postcode_required'],
+				'zone'              => $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']),
+				'status'            => $country_info['status']		
+			);
+		}
+                
+                        $html = "";               				
+			if ($results['zone'] != '') {
+				foreach ($results['zone'] as $zone) {
+        			$html .= "<option value='" . $zone['zone_id'] . "'";	    					
+	    			$html .= ">" . $zone['name'] . "</option>";
+                                   // $html .=$zone['zone_id'];
+				}
+			} else {
+				$html += '<option value="0" selected="selected">None</option>';
+			}
+                
+                
+                echo $html;
+                
+		//$this->response->setOutput(json_encode($json));*/
+	}
+}
+?>

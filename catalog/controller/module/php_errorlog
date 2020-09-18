@@ -1,0 +1,8 @@
+[08-Aug-2013 20:37:51 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/companyLogos.php on line 2
+[09-Aug-2013 09:41:41 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/lastEntered_.php on line 2
+[09-Aug-2013 10:43:30 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/product_carousel.php on line 7
+[24-Sep-2013 17:21:14 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/registration_.php on line 2
+[24-Sep-2013 17:29:36 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/lastEntered__.php on line 2
+[24-Sep-2013 17:42:03 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/searchanywhere.php on line 2
+[24-Sep-2013 17:50:32 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/customersLastEnteredTrucks.php on line 2
+[24-Sep-2013 18:00:53 CST6CDT] PHP Fatal error:  Class 'Controller' not found in /home/myspedit/public_html/catalog/controller/module/customersLastEnteredFreights.php on line 2

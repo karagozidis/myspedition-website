@@ -1,0 +1,6 @@
+[14-Sep-2013 21:31:44 CST6CDT] PHP Fatal error:  Class 'Model' not found in /home/myspedit/public_html/catalog/model/checkout/coupon.php on line 2
+[16-Sep-2013 00:20:45 CST6CDT] PHP Fatal error:  Class 'Model' not found in /home/myspedit/public_html/catalog/model/checkout/fraud.php on line 2
+[16-Sep-2013 00:52:09 CST6CDT] PHP Fatal error:  Class 'Model' not found in /home/myspedit/public_html/catalog/model/checkout/voucher_theme.php on line 2
+[16-Sep-2013 06:45:21 CST6CDT] PHP Fatal error:  Class 'Model' not found in /home/myspedit/public_html/catalog/model/checkout/voucher.php on line 2
+[04-Oct-2013 21:04:29 CST6CDT] PHP Fatal error:  Class 'Model' not found in /home/myspedit/public_html/catalog/model/checkout/order.php on line 2
+[22-Oct-2013 17:20:45 CST6CDT] PHP Fatal error:  Class 'Model' not found in /home/myspedit/public_html/catalog/model/checkout/fraud.php on line 2

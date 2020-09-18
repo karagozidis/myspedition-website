@@ -1,0 +1,25 @@
+<modification>
+	<version>1.0.0</version>
+
+<name>Paypal image on checkout by PMBwebsolutions.com</name>
+	<author>PMB Web Solutions</author>
+
+	<file name="catalog/view/theme/default/template/checkout/payment_method.tpl">
+        <operation>
+            <search position="replace">
+            	<![CDATA[<td><label for="<?php echo $payment_method['code']; ?>"><?php echo $payment_method['title']; ?></label></td>]]>
+            </search>
+            <add>
+            	<![CDATA[<td><label for="<?php echo $payment_method['code']; ?>"><?php if ($payment_method['title']=="PayPal") echo '<img src="image/data/payment/paypal.png"'; else echo $payment_method['title']; ?></label></td>]]>
+            </add>
+        </operation>       
+      
+	</file>
+		
+    
+
+
+</modification>
+
+
+
